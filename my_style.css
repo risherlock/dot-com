@@ -23,6 +23,7 @@ body {
 span.date {
   font-family: monospace;
   color:maroon;
+  font-weight: bold;
 }
 
 a {
