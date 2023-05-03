@@ -24,9 +24,11 @@
   Encoding Morse Code
 </h1>
 
-<p class="subtitle">
+<p class="date">
   April 24, 2023<br>
-  Modified: 2023-04-27
+  <span class="date">
+    Modified: <lastmod>2023-04-28</lastmod>
+  </span>
 </p>
 
 <p>
@@ -244,7 +246,7 @@
 <h2>Conclusions</h2>
 
 <p>
-  Both of the approaches are equivalent when it comes to memory usage in encoding Morse codes (i.e. a byte per Morse code). However, there is a distinction in real-time decoding. Before writing the software, I assumed that <i>Micro-Morse</i>, since it is so simple, must be time efficient to decode too. However, a day later I realized that "the bit change detector", running in the loop, might actually take more time than the Morse length parsing in <i>Mini-Morse</i> which is constant. This delay caused by few (6 at worst case e.g. e and t) loops could be trivial for microcontrollers running in order of MHz clock cycles. Anyways, strictly speaking, <i>Mini-Morse</i> is the clear winner.
+  Both of the approaches are equivalent when it comes to memory usage in encoding Morse codes (i.e. a byte per Morse code). However, there is a distinction in real-time decoding. Before writing the software, I assumed that <i>Micro-Morse</i>, since it is so simple, must be time efficient to decode too. However, a day later I realized that "the bit change detector", running in the loop, might actually take more time than parsing the Morse code length <i>Mini-Morse</i>. This delay caused by few (6 at worst case e.g. e and t) loops could be trivial for microcontrollers running in order of MHz clock cycles. Anyways, with run-time considerations, <i>Mini-Morse</i> is a clear winner.
 </p>
 
 <p>

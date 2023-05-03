@@ -4,9 +4,12 @@ h1.title {
 
 p.subtitle {
   text-align: center;
+}
+
+p.date {
+  text-align: center;
   margin-bottom: 4em;
-  font-family: monospace;
-} 
+}
 
 body {
   margin-left: 3%;
@@ -15,6 +18,10 @@ body {
   margin-bottom: 1em;
   font-family: roboto;
   font-size: 90%;
+}
+
+span.date {
+  font-family: monospace;
 }
 
 a {
@@ -32,7 +39,3 @@ p.footer {
   font-family: monospace;
 }
 
-span.modified {
-  font-family: monospace;
-  font-size: small;
-}
