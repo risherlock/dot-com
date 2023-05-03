@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>Control of Nonlinear Spacecraft Attitude Motion</title>
+  <link rel="stylesheet" href="../my_style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+<h1 class="title">
+  Control of Nonlinear Spacecraft Attitude Motion
+</h1>
+
+<p class="date">
+  May 3, 2023<br>
+  <span class="date">
+    Modified: <lastmod>2023-04-28</lastmod>
+  </span>
+</p>
+
+<h2>Preface</h2>
+
+<p>
+  <i>Control of Nonlinear Spacecraft Attitude Motion</i> is the third course in the <i>Spacecraft Dynamics and Control</i> specialization on Coursera by taught by Prof. Hanspeter Schaub. In this blog I will share my experience with the course. Hopefully, this review will inspire you to take the course yourself if the what it has to offer aligns with your interest, or vice versa.
+</p>
+
+<p>
+  I will start with my own journey of this course. It was early 2021 and I was attracted to this specialization because I was working on my thesis on Attitude Determination and Control Systems for Cubesat applications. I started with the first course <i>Kinematics: Describing the Motions of Spacecraft</i> the went on to the  second <i>Kinetics: Studying Spacecraft Motion</i>. These two courses are focused on developing the mathematical model of spacecraft. In particular, kinematics describes how the orientation of spacecraft changes with given angular velocities and kinetics describes how the angular velocites evolve due to the application of torque to the spacecraft. Collectively these two mathematical models can describe how the attitude of the spacecraft evolve for known applied torque. This knowledge allows us to perform simulation and evaluate how the spacecraft is going to perform for various sources of torques that are present in the space like gravity gradient, solar radiation pressure, aerodynamic drag, magnetic field and so on. The third course, which is the topic of this blog, deals computing the control torque to the spacecraft such that when the torque is applied, the attitude and/or rates of the spacecraft is driven to the desired attitude and/or rates.
+</p>
+
+<p>
+  My experience with the first two courses was pretty smooth. I took them with seven days free trial for each course using the credit card credentials of my friend Rochak. It was important for me to learn topics for my thesis so I was very excited that I completed both of the courses in seven days each. However same was not true for the third one. I started the course on April/May of 2021. I was lost in the details of mathematical definitions and couldnot go far enough to make sense of the Lyapunov method in nonlinear control design. I didnot go past the first two weeks and I feel ashamed now for I feel that the the sheer beauty of Lyapunov method is its simplicity and intuitiveness. Then I got busy with my project and forgot the course for another year when I gave it a second try. The second try was more dismal for I was involved in full time job and I was more focused in finishing the course then learning control. I went little far than the first time but not much. The course, was for the second time, forgotten. Then on the August 2022, I saw a post on LinkedIn where a person had completed the course. I have never come across someone who completed it and the fact that I gave it up two times was weighing heavy in my concise for I liked the field of nonlinear control. It was during this time that I was determined that I would complete the course.
+</p>
+
+<p>
+  On the early February of 2023, I had left the job, completed my GRE examination, and was enjoying the book <i>Matrix groups for undergraduates</i> by Kristopher Tapp. I really don't recall why, but it felt right time to start the course again. I paused the study of Matrix groups and by the second week of February, I was seriously studying the course. 
+</p>
+
+<h2>Course overview</h2>
+
+<p>
+  The dynamical equations of the spacecraft is governed by a set of nonlinear differential equations. This means that the tools and techniques of the linear control system, which is designed for linear dynamics system does not gurantee the performance of spacecraft control. There is this idea of linearizing the nonlinear dynamics then using the tools of linear control. This approximation, however, works for small errors and will not perform for large attitude errors where the nonlinearity of the dynamics is inevitable. We are but forced to used the ideas of nonlinear control system.
+</p>
+
+<p>
+  In the heart of this course lies the Lyapunov theory of stability which is a powerful concept in nonlinear control design. In big picture, one can imagine this course to be introduction to Lyapunov theory and its application to the dynamics of spacecraft. In doing so, various practical considerations, problems, and respective solutions are discussed. It is important to mention that, throughout the course, attitude is parameterized in Modified Rodrigues Parameters (MRPs) (not quaternions for instance), of which Prof. Schaub is a pioneer, a huge admirer and an advocate. It is enough to say that he enjoys teaching and talking about MRPs which he explicity mentions throughout the course. However, his inclination to MPRs is not without its reasons and it will be clear as we discuss more about the course.
+</p>
+
+<p>
+  Let us move forward and explore the course.
+</p>
+
+<h2>I. Stability definitions</h2>
+
+<h3>Stability of linear systems</h3>
+
+<p>
+  Linear dynamical systems has fine line when it comes to stability; a system is either stable or unstable. Furthemore, the idea of stability in linear system manifests itself in elegance mathematically too. For instance in state space representation.
+</p>
+
+<h3>Stability of nonlinear systems</h3>
+
+<h2>II. Lyapunov theory</h2>
+
+<h2>III. Spacecraft attitude and rates control</h2>
+
+<h2>IV. Practical considerations</h2>
+
+<h2>Conclusions</h2>
+
+<hr class="footer">
+<p class="footer">
+  <a href="../index.html">HOME</a>
+</p>
+
+</body>
+</html>
+
