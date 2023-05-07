@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>k-vector range search algorithm</title>
+  <link rel="stylesheet" href="../my_style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+<h1 class="title">
+  k-vector range search algorithm
+</h1>
+
+<p class="date">
+  May 5, 2023<br>
+  <!-- <span class="date">
+    Modified: <lastmod>2023-04-28</lastmod>
+  </span> -->
+</p>
+
+<p>
+  \(k\)-vector is a time efficient range search algorithm developed by Daniele Mortari for identification of star patterns in the image taken by star trackers onboard spacecrafts. The name derives from one dimensional vector of integers, the vector \(k\), with \(n\) elements that plays central part in the execution of algorithm.
+</p>
+
+<h2>Problem statement</h2>
+
+<p>
+  In order to better understand the nature of the problems that this method solves, let us start with an example. Suppose there is a one dimensional vector \(y\) with \(n\) numbers that represents the height of all students in a class room. Suppose, a fitness instructor wants to find the students whose height lie in range \([y_{a}, y_{b}]\). Now this problem of determining the heights of students in the given range is the range search problem. The vector \(y\), on which the search is performed, is known as database.
+</p>
+
+<p>
+  If solve the above mentioned problem, intuitively, we would go thorugh each element of the database and check by comparison if the element lies in the range or not. This works fine database with small \(n\) but is inefficient if search has to be performed frequently for large \(n\).
+</p>
+
+<p>
+  We can go further and be more clever. Instead of performing check for each elements in the database, we can sort the database \(y\) to create a vector \(s\) then use better search methods like binary search algorithm. This is good improvement over the former naive approach. However, the binary search algorithm still requires us to perform \(2\)log\({}_{2}n\) comparisions which could still be computationally expensive for real-time applications like, for instance, star tracker with its huge database of star information.
+</p>
+
+<p>
+  The above mentioned problem statement is where \(k\)-vector method shines for it doesnot involve the search step for range finding. It does, however, requires us to create a vector \(k\) with same length as of the database (i.e. \(n\)). This is the memory cost of the algorithm that comes with the privoage of its fast execution for range search. Let us see how the \(k\)-vector is constructed and searches are performed.
+</p>
+
+<h2>Algorithm</h2>
+
+<p>
+  Having established the problem statement and the advantage of k-vector, let us now discuss the algorithm itself. The variables and notations used are listed below.
+</p>
+
+<h3>Notations</h3>
+
+
+<p>
+  <table>
+    <tr>
+      <td>\(\boldsymbol{y}\)</td>
+      <td>One dimensional, \(n\)-long, vector of real numbers on which the range search is to be performed. Database.</td>
+    </tr>
+
+    <tr>
+      <td>\(\boldsymbol{s}\)</td>
+      <td>Elements in vector \(\boldsymbol{y}\) arranged in ascending order.</td>
+    </tr>
+
+    <tr>
+      <td>\(\boldsymbol{k}\)</td>
+      <td>\(n\)-long special vector of integers whose element represents the number of elements in \(\boldsymbol{s}\) that are less than. The k-vector</td>
+    </tr>
+
+    <tr>
+      <td>\(y_{\text{min}} = \boldsymbol{s}(1)\)</td>
+      <td>Minimum element in the database.</td>
+    </tr>
+
+    <tr>
+      <td>\(y_{\text{max}} = \boldsymbol{s}(n)\)</td>
+      <td>Maximum element in the database.</td>
+    </tr>
+
+    <tr>
+      <td style="padding-right: 1em;">\(z(x) = mx + q \)</td>
+      <td>Virtual line that forms the basis of construction of \(\boldsymbol{k}\) where m is slope and \(q\) is the \(y\) intercept.</td>
+    </tr>
+
+    <tr>
+      <td><snap style="font-family: monospace;">up</snap>\((x)\)</td>
+      <td>Nearest integer greater than \(x\). <snap style="font-family: monospace;">up</snap>(1.1) = 2.</td>
+    </tr>
+
+    <tr>
+      <td><snap style="font-family: monospace;">dn</snap>\((x)\)</td>
+      <td>Nearest integer less than \(x\). <snap style="font-family: monospace;">dn</snap>(1.9) = 1.</td>
+    </tr>
+  </table>
+  <br>
+  <i>Note: </i>The indices of vector starts with 1. 
+</p>
+
+<h3>Principle</h3>
+
+<p>
+  \(\boldsymbol{s}\) is the sorted database, so if we plot the elements of \(\boldsymbol{s}\) with their corresponding indices as x-axis, we can expect the graph to increase monotonically.
+</p>
+
+<p>
+  The idea is introduce a line using the end points that would enclose \(y_{min}\) and \(y_{max}\). In order to enclose these points, we extend the line by smallest possible value i.e. the relative machine precision \(\epsilon\). Hence, the virtual line passes through the points \((1,\,y_{min}-\epsilon)\) and \((n,\,y_{max} + \epsilon)\) so that \(y_{min}\) and \(y_{max}\) are enclosed by the end points.
+</p>
+
+<h3>k-vector construction</h3>
+
+<p>
+  The algorithm proceeds with construction of k-vector which, in turn, depends on construction of virtual line \(z(x)\) discussed in above section. Since we know the two points that lie on the line (i.e.  \((1,\,y_{min}-\epsilon)\) and \((n,\,y_{max} + \epsilon)\)), we can simply use the equation of slope to find its slope \(m\) and y-intercept \(q\).
+  $$m=\frac{y_{\text{max}}-y_{\text{min}}+2\xi}{n-1}$$
+  and
+  $$q=y_{\text{min}}-m-\xi$$
+</p>
+
+<p>
+  With the line \(z(x)\) parameterized succssfully, we can use it to construct the k-vector as follows
+  $$\boldsymbol{k}(i)=j$$
+</p>
+
+<p>
+  where, \(\boldsymbol{s}(j)\leq z(i) \leq\boldsymbol{s}(j+1)\), \(i = 2\text{ to }n-1\), \(\boldsymbol{k}(1)=0\), and \(\boldsymbol{k}(1)=n\).
+</p>
+
+<p>
+  We can see that the k-vector holds the value of index \(j\) such that the value of the vector \(\boldsymbol{s}\) for that index is less than \(z(i)\). This means that elements of k-vector represents the number of elements in \(\boldsymbol{s}\) less than \(z(i)\). Now the values \(\boldsymbol{k}(1)=0\), and \(\boldsymbol{k}(n)=n\) makes sense because there are no elements in k-vector below \(z(1)\) and all the elements are enclosed by \(z(n)\).  
+</p>
+
+<h3>Search</h3>
+
+<p>
+  We are ready to search range after the k-vector is constructed. We are looking for the values in \(\boldsymbol{s}\) that lies in the range \([y_{a},\,y_{b}]\). In other words, we are searching for the two indices that encloses the elements in \(\boldsymbol{s}\) that lies in the range. The indices are computed as
+
+  \begin{equation}
+    j_{b}=\text{dn}\!\left(\frac{y_{a}-q}{m}\right)\quad\text{and}\quad j_{b}=\text{up}\!\left(\frac{y_{b}-q}{m}\right)
+  \end{equation}
+
+  The range of values in s in range \([y_{a},\,y_{b}]\) is \([\boldsymbol{s}(k_{\text{start}}),\,\boldsymbol{s}(k_{\text{start}})]\) where the indices \(k_{\text{start}}\) and \(k_{\text{end}}\) are computed as
+
+  \begin{equation}
+    k_{\text{start}} = k(j_{b}) + 1\quad\text{and}\quad k_{\text{end}} = k(j_{t}).
+  \end{equation}
+  
+  Hence, there are \(k_{\text{end}}-k_{\text{start}}\) elements in database which lies in range \([y_{a},\,y_{b}]\) and the elements are \(\boldsymbol{s}(k_{\text{start}}),\,\boldsymbol{s}(k_{\text{start}+1}), \boldsymbol{s}(k_{\text{start}+2}),\,...,\,\boldsymbol{s}(k_{\text{end}})\).
+</p>
+
+<h3>An extraneous element</h3>
+
+<p>
+  So far we saw that once k-vector is constructed, the search phase is actually some couple of equations and we get our solution. This minimalism is the beauty of k-vector algorithm. However we are not done yet for there is one subtlety that we need to handle.
+</p>
+
+<p>
+  The problem is that it is not guranteed that the elements represented by \(k_{\text{start}}\) and \(k_{\text{end}}\) lie in the range. There is a 50% probability the each of them doesnot lie in the range. In the cases whereprecision is crucial, so we need to comparision checks to make sure that \(k_{\text{start}}\) and \(k_{\text{end}}\) elements, in fact, lie in the range. The pseudocode for the checks are presented below.
+</p>
+
+<p>
+<table style="margin-left: auto; margin-right: auto;">
+  <tr>
+    <td style="padding: 1em; border: 0.1em black solid;">
+      while \(\left(\boldsymbol{s}(k_{\text{start}}))\lt y_{a}\right)\)<br>
+      {<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;\(k_{\text{start}}\)++;<br>
+      }<br>
+    </td>
+    <td style="padding: 1em; border: 0.1em black solid;">
+      while \(\left(\boldsymbol{s}(k_{\text{end}}))\gt y_{b}\right)\)<br>
+      {<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;\(k_{\text{start}}\)--;<br>
+      }<br>
+    </td>
+  </tr>
+</table>
+</p>
+
+<p>
+  This extra step to otherwise computationally minimal search algorithm raises a question. How many times will the while loop go on? \(E_{0}=n/(n-1)\) is the number of checks what we have to perform for each indices. This, however, does not add too much burden to the algorithm because, for large databases where \(n\rightarrow\infty\), \(E_{0}\rightarrow 1\).
+</p>
+
+<h2>Example</h2>
+
+<p>
+  Now that we have 
+</p>
+
+<p>
+  <b>References</b><br>
+  <ol>
+    <li></li>
+  </ol>
+</p>
+
+<hr class="footer">
+<p class="footer">
+  <a href="../index.html">HOME</a>
+</p>
+</body>
+</html>
+
