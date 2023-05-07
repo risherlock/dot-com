@@ -169,7 +169,7 @@
     <td style="padding: 1em; border: 0.1em black solid;">
       while \(\left(\boldsymbol{s}(k_{\text{end}}))\gt y_{b}\right)\)<br>
       {<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;\(k_{\text{start}}\)--;<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;\(k_{\text{end}}\)--;<br>
       }<br>
     </td>
   </tr>
@@ -180,16 +180,11 @@
   This extra step to otherwise computationally minimal search algorithm raises a question. How many times will the while loop go on? \(E_{0}=n/(n-1)\) is the number of checks what we have to perform for each indices. This, however, does not add too much burden to the algorithm because, for large databases where \(n\rightarrow\infty\), \(E_{0}\rightarrow 1\).
 </p>
 
-<h2>Example</h2>
-
-<p>
-  Now that we have 
-</p>
-
+If you are interested, please checkout software for <a href="https://github.com/MetricTensorLabs/Cassiopeia/tree/main/software/precursors">k-vector method</a>. 
 <p>
   <b>References</b><br>
   <ol>
-    <li></li>
+    <li>Daniele Mortari, Beny Neta - <i>k-Vector range searching techniques (2014)</i></li>
   </ol>
 </p>
 
