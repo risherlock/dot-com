@@ -21,31 +21,35 @@
 </p>
 
 <p>
-  \(k\)-vector is a time efficient range search algorithm developed by Daniele Mortari for identification of star patterns in the image taken by star trackers onboard spacecrafts. The name derives from one dimensional vector of integers, the vector \(k\), with \(n\) elements that plays central part in the execution of algorithm.
+  <i>k-vector</i> is a time efficient range search algorithm developed by Daniele Mortari for identification of star patterns by star trackers onboard spacecrafts. The name of the algorithm derives from the vector \(\boldsymbol{k}\); one dimensional vector of integers that plays central part in the execution of algorithm.
+</p>
+
+<p>
+  This blog is intended to be commentary and guide to the paper <a href="#mortari2014">[1]</a>. I hope this helps you in your journey to understand, or write <a href="https://github.com/MetricTensorLabs/Cassiopeia/tree/main/software/precursors">software</a>, for the algorithm.
 </p>
 
 <h2>Problem statement</h2>
 
 <p>
-  In order to better understand the nature of the problems that this method solves, let us start with an example. Suppose there is a one dimensional vector \(y\) with \(n\) numbers that represents the height of all students in a class room. Suppose, a fitness instructor wants to find the students whose height lie in range \([y_{a}, y_{b}]\). Now this problem of determining the heights of students in the given range is the range search problem. The vector \(y\), on which the search is performed, is known as database.
+  In order to better understand the range searching problem, let us start with an example. Suppose there are \(n\) students in a class room and the heights of all students are represented by \(n\) dimensional real vector \(\boldsymbol{y}\). Let us further assume that a fitness instructor wants to find the students whose height lie in range \([y_{a}, y_{b}]\). Now this problem of determining the elements in \(\boldsymbol{y}\) that lie in the given range is called the range search problem. The vector \(\boldsymbol{y}\), on which the search is to be performed, is known as database.
 </p>
 
 <p>
-  If solve the above mentioned problem, intuitively, we would go thorugh each element of the database and check by comparison if the element lies in the range or not. This works fine database with small \(n\) but is inefficient if search has to be performed frequently for large \(n\).
+  We can solve above problem intuitively by going thorugh each element of the database and comparing if the element lies in the range or not. This works fine but is inefficient if search has to be performed frequently for large \(n\).
 </p>
 
 <p>
-  We can go further and be more clever. Instead of performing check for each elements in the database, we can sort the database \(y\) to create a vector \(s\) then use better search methods like binary search algorithm. This is good improvement over the former naive approach. However, the binary search algorithm still requires us to perform \(2\)log\({}_{2}n\) comparisions which could still be computationally expensive for real-time applications like, for instance, star tracker with its huge database of star information.
+  We can go further and be more clever. Instead of performing comparison for each elements in the database, we can use better search methods like binary search algorithm. This is good improvement over the former naive approach. However, the binary search algorithm still requires us to perform \(2\)log\({}_{2}n\) comparisions which could be computationally expensive for real-time applications like, for instance, star tracker with its huge database of star information.
 </p>
 
 <p>
-  The above mentioned problem statement is where \(k\)-vector method shines for it doesnot involve the search step for range finding. It does, however, requires us to create a vector \(k\) with same length as of the database (i.e. \(n\)). This is the memory cost of the algorithm that comes with the privoage of its fast execution for range search. Let us see how the \(k\)-vector is constructed and searches are performed.
+  The above mentioned problem statement is where k-vector method shines becase it doesnot involve the any comparision based search steps for range finding. It does, however, requires us to create a integer vector \(\boldsymbol{k}\) with same length as of the database (i.e. \(n\)). This memory cost comes with the privilage of its fast execution. Let us now see how the k-vector is constructed and consequent searches are performed.
 </p>
 
 <h2>Algorithm</h2>
 
 <p>
-  Having established the problem statement and the advantage of k-vector, let us now discuss the algorithm itself. The variables and notations used are listed below.
+  The variables and notations, which follows from <a href="#mortari2014">[1]</a>, are listed below.
 </p>
 
 <h3>Notations</h3>
@@ -69,32 +73,32 @@
     </tr>
 
     <tr>
-      <td>\(y_{\text{min}} = \boldsymbol{s}(1)\)</td>
-      <td>Minimum element in the database.</td>
+      <td>\(y_{\text{min}}\quad\)</td>
+      <td>Minimum element in the database. \(y_{\text{min}} = \boldsymbol{s}[1]\).</td>
     </tr>
 
     <tr>
-      <td>\(y_{\text{max}} = \boldsymbol{s}(n)\)</td>
-      <td>Maximum element in the database.</td>
+      <td>\(y_{\text{max}}\)</td>
+      <td>Maximum element in the database. \(y_{\text{max}} = \boldsymbol{s}[n]\).</td>
     </tr>
 
     <tr>
-      <td style="padding-right: 1em;">\(z(x) = mx + q \)</td>
-      <td>Virtual line that forms the basis of construction of \(\boldsymbol{k}\) where m is slope and \(q\) is the \(y\) intercept.</td>
+      <td>\(z(x)\)</td>
+      <td>Virtual line that forms the basis of construction of \(\boldsymbol{k}\) where m is slope and \(q\) is the \(y\) intercept. \(z(x) = mx + q \).</td>
     </tr>
 
     <tr>
-      <td><snap style="font-family: monospace;">up</snap>\((x)\)</td>
-      <td>Nearest integer greater than \(x\). <snap style="font-family: monospace;">up</snap>(1.1) = 2.</td>
+      <td>\(\lceil x\rceil\)</td>
+      <td>Nearest integer greater than \(x\). Example: \(\lceil1.1\rceil\) = 2.</td>
     </tr>
 
     <tr>
-      <td><snap style="font-family: monospace;">dn</snap>\((x)\)</td>
-      <td>Nearest integer less than \(x\). <snap style="font-family: monospace;">dn</snap>(1.9) = 1.</td>
+      <td>\(\lfloor x\rfloor\)</td>
+      <td>Nearest integer less than \(x\). Example: \(\lfloor1.9\rfloor\) = 1.</td>
     </tr>
   </table>
   <br>
-  <i>Note: </i>The indices of vector starts with 1. 
+  <i>Note: </i>The indices of vector starts with 1 and the elements of vectors are indexed using square brackets. 
 </p>
 
 <h3>Principle</h3>
@@ -118,11 +122,11 @@
 
 <p>
   With the line \(z(x)\) parameterized succssfully, we can use it to construct the k-vector as follows
-  $$\boldsymbol{k}(i)=j$$
+  $$\boldsymbol{k}[i]=j$$
 </p>
 
 <p>
-  where, \(\boldsymbol{s}(j)\leq z(i) \leq\boldsymbol{s}(j+1)\), \(i = 2\text{ to }n-1\), \(\boldsymbol{k}(1)=0\), and \(\boldsymbol{k}(1)=n\).
+  where, \(\boldsymbol{s}(j)\leq z(i) \leq\boldsymbol{s}(j+1)\), \(i = 2\text{ to }n-1\), \(\boldsymbol{k}[1]=0\), and \(\boldsymbol{k}[n]=n\).
 </p>
 
 <p>
@@ -135,16 +139,28 @@
   We are ready to search range after the k-vector is constructed. We are looking for the values in \(\boldsymbol{s}\) that lies in the range \([y_{a},\,y_{b}]\). In other words, we are searching for the two indices that encloses the elements in \(\boldsymbol{s}\) that lies in the range. The indices are computed as
 
   \begin{equation}
-    j_{b}=\text{dn}\!\left(\frac{y_{a}-q}{m}\right)\quad\text{and}\quad j_{b}=\text{up}\!\left(\frac{y_{b}-q}{m}\right)
+    j_{b}=\biggr\lfloor\!\frac{y_{a}-q}{m}\biggr\rfloor
+  \end{equation}
+  
+  and
+  
+  \begin{equation}
+    j_{b}=\biggr\lceil\!\frac{y_{b}-q}{m}\biggr\rceil.
   \end{equation}
 
   The range of values in s in range \([y_{a},\,y_{b}]\) is \([\boldsymbol{s}(k_{\text{start}}),\,\boldsymbol{s}(k_{\text{start}})]\) where the indices \(k_{\text{start}}\) and \(k_{\text{end}}\) are computed as
 
   \begin{equation}
-    k_{\text{start}} = k(j_{b}) + 1\quad\text{and}\quad k_{\text{end}} = k(j_{t}).
+    k_{\text{start}} = k[j_{b}] + 1
+  \end{equation}
+
+  and
+
+  \begin{equation}
+    k_{\text{end}} = k[j_{t}].
   \end{equation}
   
-  Hence, there are \(k_{\text{end}}-k_{\text{start}}\) elements in database which lies in range \([y_{a},\,y_{b}]\) and the elements are \(\boldsymbol{s}(k_{\text{start}}),\,\boldsymbol{s}(k_{\text{start}+1}), \boldsymbol{s}(k_{\text{start}+2}),\,...,\,\boldsymbol{s}(k_{\text{end}})\).
+  Hence, there are \(k_{\text{end}}-k_{\text{start}}\) elements in database which lies in range \([y_{a},\,y_{b}]\) and the elements are \(\boldsymbol{s}[k_{\text{start}}]\), \(\boldsymbol{s}[k_{\text{start}+1}]\), \(\boldsymbol{s}[k_{\text{start}+2}]\), ... , \(\boldsymbol{s}[k_{\text{end}}]\).
 </p>
 
 <h3>An extraneous element</h3>
@@ -161,13 +177,13 @@
 <table style="margin-left: auto; margin-right: auto;">
   <tr>
     <td style="padding: 1em; border: 0.1em black solid;">
-      while \(\left(\boldsymbol{s}(k_{\text{start}}))\lt y_{a}\right)\)<br>
+      while \(\left(\boldsymbol{s}[k_{\text{start}}]\lt y_{a}\right)\)<br>
       {<br>
       &nbsp;&nbsp;&nbsp;&nbsp;\(k_{\text{start}}\)++;<br>
       }<br>
     </td>
     <td style="padding: 1em; border: 0.1em black solid;">
-      while \(\left(\boldsymbol{s}(k_{\text{end}}))\gt y_{b}\right)\)<br>
+      while \(\left(\boldsymbol{s}[k_{\text{end}}]\gt y_{b}\right)\)<br>
       {<br>
       &nbsp;&nbsp;&nbsp;&nbsp;\(k_{\text{end}}\)--;<br>
       }<br>
@@ -180,11 +196,10 @@
   This extra step to otherwise computationally minimal search algorithm raises a question. How many times will the while loop go on? \(E_{0}=n/(n-1)\) is the number of checks what we have to perform for each indices. This, however, does not add too much burden to the algorithm because, for large databases where \(n\rightarrow\infty\), \(E_{0}\rightarrow 1\).
 </p>
 
-If you are interested, please checkout software for <a href="https://github.com/MetricTensorLabs/Cassiopeia/tree/main/software/precursors">k-vector method</a>. 
 <p>
   <b>References</b><br>
   <ol>
-    <li>Daniele Mortari, Beny Neta - <i>k-Vector range searching techniques (2014)</i></li>
+    <li><a id="mortari2014">Daniele Mortari, Beny Neta - <i>k-Vector range searching techniques (2014)</a></i></li>
   </ol>
 </p>
 
