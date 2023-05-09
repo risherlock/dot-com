@@ -188,7 +188,12 @@
 </p>
 
 <p>
-  <table style="margin-left: auto; margin-right: auto;">
+  <table style="margin-left: auto; margin-right: auto; border-collapse: collapse; ">
+    <tr>
+      <th style="padding: 0.2em; border: 0.1em black solid;">\(k_{\text{start}}\)</th>
+      <th style="padding: 0.2em; border: 0.1em black solid;">\(k_{\text{end}}\)</th>
+    </tr>
+
     <tr>
       <td style="padding: 1em; border: 0.1em black solid;">
         while \(\left(\boldsymbol{s}[k_{\text{start}}]\lt y_{a}\right)\)<br>
@@ -196,6 +201,7 @@
         &nbsp;&nbsp;&nbsp;&nbsp;\(k_{\text{start}}\)++;<br>
         }<br>
       </td>
+      
       <td style="padding: 1em; border: 0.1em black solid;">
         while \(\left(\boldsymbol{s}[k_{\text{end}}]\gt y_{b}\right)\)<br>
         {<br>
