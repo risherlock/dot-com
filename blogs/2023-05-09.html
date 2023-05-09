@@ -43,7 +43,7 @@
 </p>
 
 <p>
-  The above mentioned problem statement is where k-vector method shines becase it doesnot involve the any comparision based search steps for range finding. It does, however, requires us to create a integer vector \(\boldsymbol{k}\) with same length as of the database (i.e. \(n\)). This memory cost comes with the privilage of its fast execution. Let us now see how the k-vector is constructed and consequent searches are performed.
+  The above mentioned problem is where k-vector method shines because it does not involve any comparision based search steps for range finding. It does, however, requires us to create a integer vector \(\boldsymbol{k}\) with same length as of the database (i.e. \(n\)). This memory cost comes with the privilage of its fast execution. Let us see how the k-vector is constructed and consequent searches are performed.
 </p>
 
 <h2>Algorithm</h2>
@@ -58,7 +58,7 @@
   <table>
     <tr>
       <td>\(\boldsymbol{y}\)</td>
-      <td>One dimensional, \(n\)-long, vector of real numbers on which the range search is to be performed. Database.</td>
+      <td>\(n\) dimensional real vector on which the range search is to be performed. It is also known as database.</td>
     </tr>
 
     <tr>
@@ -68,7 +68,7 @@
 
     <tr>
       <td>\(\boldsymbol{k}\)</td>
-      <td>\(n\)-long special vector of integers whose element represents the number of elements in \(\boldsymbol{s}\) that are less than. The k-vector</td>
+      <td>\(n\) dimensional vector of integers used in range search.</td>
     </tr>
 
     <tr>
@@ -80,12 +80,7 @@
       <td>\(y_{\text{max}}\)</td>
       <td>Maximum element in the database. \(y_{\text{max}} = \boldsymbol{s}[n]\).</td>
     </tr>
-
-    <tr>
-      <td>\(z(x)\)</td>
-      <td>Virtual line that forms the basis of construction of \(\boldsymbol{k}\) where m is slope and \(q\) is the \(y\) intercept. \(z(x) = mx + q \).</td>
-    </tr>
-
+    
     <tr>
       <td>\(\lceil x\rceil\)</td>
       <td>Nearest integer greater than \(x\). Example: \(\lceil1.1\rceil\) = 2.</td>
@@ -103,16 +98,20 @@
 <h3>k-vector construction</h3>
 
 <p>
-\(\boldsymbol{s}\) is sorted database, so if we plot the elements of \(\boldsymbol{s}\) with their corresponding indices as x-axis, we can expect the graph to increase monotonically. First of all we need to define a <i>virtual line</i> using two points with x coordinates 1 and \(n\), and y coordinates in such a way that they enclose \(y_{min}\) and \(y_{max}\). This can be achieved by defining the end points to be \((1,\,y_{min}-\xi)\) and \((n,\,y_{max} + \xi)\). This idea of enclosing makes sure that the range containing \(y_{a}=y_{\text{min}}\) or \(y_{b}=y_{\text{max}}\) are searchable. \(\xi=\epsilon\,\text{max}(|y_{\text{min}}|,|y_{\text{max}}|)\) where \(\epsilon\) is relative machine precision of floating point datatype. We will represent this virtual line with equation \(z(x)=mx+q\).
+  \(\boldsymbol{s}\) is sorted database, so if we plot the elements of \(\boldsymbol{s}\) with their corresponding indices as x-axis, we can expect the graph to increase monotonically. First of all we need to define a <i>virtual line</i> using two points with x coordinates 1 and \(n\), and y coordinates in such a way that they enclose \(y_{min}\) and \(y_{max}\). This can be achieved by defining the end points to be \((1,\,y_{min}-\xi)\) and \((n,\,y_{max} + \xi)\) where  \(\xi=\epsilon\,\text{max}(|y_{\text{min}}|,|y_{\text{max}}|)\) and \(\epsilon\) is relative machine precision of floating point datatype. 
+</p>
+
+<p>
+  This idea of enclosing makes sure that the range containing \(y_{a}=y_{\text{min}}\) or \(y_{b}=y_{\text{max}}\) are searchable. We will represent the line with equation \(z(x)=mx+q\). \(z(x)\) plays an important role in the construction of k-vector.
 </p>
 
 <div style="text-align: center;">
-  <img src="figs/2023-05-09_kvector.png" width="400em"><br>
-  k-vector construction using virtual line.
+  <img src="figs/2023-05-09_kvector.svg" width="450em"><br>
+  Figure: Construction of k-vector using the virtual line \(z(x)\).
 </div>
 
 <p>
-  Construction of k-vector depends on the line \(z(x)\) discussed in above section. Since we know the two points that lie on the line (i.e.  \((1,\,y_{min}-\epsilon)\) and \((n,\,y_{max} + \epsilon)\)), we can simply use the equation of slope to find its slope \(m\) and y-intercept \(q\).
+ Since we know the two points that lie on the line (i.e.  \((1,\,y_{min}-\epsilon)\) and \((n,\,y_{max} + \epsilon)\)), we can simply use the equation of slope to find its slope \(m\) and y-intercept \(q\).
   $$m=\frac{y_{\text{max}}-y_{\text{min}}+2\xi}{n-1}$$
   and
   $$q=y_{\text{min}}-m-\xi$$
@@ -120,20 +119,28 @@
 
 <p>
   With the line \(z(x)\) parameterized succssfully, we can use it to construct the k-vector as follows
-  $$\boldsymbol{k}[i]=j$$
+
+  \begin{equation}
+  k[i] = 
+  \begin{cases}
+    0 &\text{for}\,\,i=0\\
+    n &\text{for}\,\,i=n\\
+    j &\text{otherwise, where }\boldsymbol{s}[j]\leq z[i]\leq\boldsymbol{s}[j+1]
+  \end{cases}
+  \end{equation}
 </p>
 
 <p>
-  where, \(\boldsymbol{s}[j]\leq z[i] \leq\boldsymbol{s}[j+1]\), \(i = 2\text{ to }n-1\), \(\boldsymbol{k}[1]=0\), and \(\boldsymbol{k}[n]=n\).
-</p>
-
-<p>
-  We can see that the k-vector is equal to the index \(j\) such that the \(j\)th element of the vector \(\boldsymbol{s}\) is less than \(z(i)\). This suggests that elements of k-vector represents the number of elements in \(\boldsymbol{s}\) less than \(z(i)\). The values \(\boldsymbol{k}[1]=0\), and \(\boldsymbol{k}[n]=n\) makes sense with this intuition as:
+  We can see that the k-vector is equal to the index \(j\) for \(0\lt i\lt n\), where \(j\)th element of \(\boldsymbol{s}\) is less than \(z[i]\) and the next element is greater. This suggests that elements of k-vector represents the number of elements in \(\boldsymbol{s}\) less than \(z[i]\). This is best visualized in the figure above. The values \(\boldsymbol{k}[1]=0\), and \(\boldsymbol{k}[n]=n\) makes sense with this intuition as:
   
   <ol type="i">
     <li>there are no elements in \(\boldsymbol{s}\) below \(z[1]\) and</li>
-    <li>all the elements of \(\boldsymbol{s}\) are enclosed by \(z[n]\).<sup><a href="#xi">*</a></sup></li>
+    <li>all the elements of \(\boldsymbol{s}\) are enclosed by \(z[n]\).
   </ol>
+</p>
+
+<p>
+  Do you see how the introduction of \(\xi\) proves to be important for the two cases to be true?
 </p>
 
 <h3>Search</h3>
@@ -143,7 +150,7 @@
 </p>
 
   <p>
-  Let us compute two intermidiate indices of \(\boldsymbol{k}\) for determining \(k_{\text{start}}\) and \(k_{\text{end}}\).  
+  Let us compute two intermidiate indices \(j_{b}\) and \(j_{t}\) for \(\boldsymbol{k}\) to determe \(k_{\text{start}}\) and \(k_{\text{end}}\) respectively.  
 
   \begin{equation}
     j_{b}=\biggr\lfloor\!\frac{y_{a}-q}{m}\biggr\rfloor
@@ -204,7 +211,11 @@
 </p>
 
 <p>
-  \(E_{0}=n/(n-1)\) is the number of comparisions (i.e. number of loops) that we need to perform for each index (i.e. \(k_{\text{start}}\) and \(k_{\text{end}}\)). This, however, does not add too much burden to the algorithm because, for large databases where \(n\rightarrow\infty\), \(E_{0}\rightarrow 1\). Hence, if the application doesnot require precision, this step can be ignored alltogether. 
+  \(E_{0}=n/(n-1)\) is the number of comparisions (i.e. number of loops) that we need to perform for each index (i.e. \(k_{\text{start}}\) and \(k_{\text{end}}\)). This, however, does not add too much burden to the algorithm because, for large databases, where \(n\rightarrow\infty\), \(E_{0}\rightarrow 1\). Hence, if the application doesnot require precision, this step can be ignored alltogether. 
+</p>
+
+<p>
+  Thank you <a href="https://github.com/sriza">Sriza</a> for proofreading the blog.
 </p>
 
 <p>
@@ -212,10 +223,6 @@
   <ol>
     <li><a id="mortari1997">Daniele Mortari - <i>Search-Less Algorithm for Star Pattern Recognition</i> (1997)</a></i></li><li><a id="mortari2014">Daniele Mortari, Beny Neta - <i>k-Vector range searching techniques</i> (2014)</a></li>
   </ol>
-</p>
-
-<p>
-  <sup><a id="xi">*</a></sup>Do you see how the introduction of \(\xi\) proves to be important in this context?
 </p>
 
 <hr class="footer">
