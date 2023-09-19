@@ -1,6 +1,11 @@
 h1.title {
   text-align: center;
-  color: #800000;
+  color: #764abc
+}
+
+a:link, a:visited, a:active {
+  text-decoration: none;
+  color: #764abc;
 }
 
 p.subtitle {
@@ -19,15 +24,11 @@ body {
   margin-bottom: 1em;
   font-family: 'Lora';
   font-size: medium;
+  background-color:rgba(226, 226, 226, 0.274);
 }
 
 span.date {
   font-family: monospace;
-}
-
-a:link, a:visited, a:active {
-  text-decoration: none;
-  color: #800000;
 }
 
 hr.footer {
