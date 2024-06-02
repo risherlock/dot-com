@@ -98,7 +98,7 @@
      id="layer1"
      transform="translate(-17.313459,-133.88597)">
     <rect
-       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.45;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect815-3"
        width="29.64728"
        height="59.869007"
@@ -123,7 +123,7 @@
        cy="-164.07047"
        cx="-71.53022"
        id="path817-3-0-8-9"
-       style="opacity:1;fill:#2600ff;fill-opacity:0.427451;stroke:#000000;stroke-width:0.45;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+       style="opacity:1;fill:#2600ff;fill-opacity:0.427451;stroke:#000000;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <circle
        style="opacity:1;fill:#ffffff;fill-opacity:0.470588;stroke:#2600ff;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.427451"
        id="path1622-7-7"
@@ -164,7 +164,7 @@
          y="199.61075"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:monospace;-inkscape-font-specification:monospace;stroke-width:0.264583">freefall</tspan></text>
     <rect
-       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.45;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect815-3-4"
        width="29.64728"
        height="59.869007"
@@ -189,7 +189,7 @@
        cy="-173.00497"
        cx="-32.387077"
        id="path817-3-0-8-9-4"
-       style="opacity:1;fill:#2600ff;fill-opacity:0.427451;stroke:#000000;stroke-width:0.45;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+       style="opacity:1;fill:#2600ff;fill-opacity:0.427451;stroke:#000000;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <circle
        style="opacity:1;fill:#ffffff;fill-opacity:0.470588;stroke:#2600ff;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.427451"
        id="path1622-7-7-5"
@@ -229,5 +229,13 @@
          x="27.123339"
          y="199.34404"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:monospace;-inkscape-font-specification:monospace;stroke-width:0.264583">rest</tspan></text>
+    <rect
+       ry="3.4593046"
+       y="126.57795"
+       x="51.633572"
+       height="74.985054"
+       width="39.793297"
+       id="rect832-9-6"
+       style="fill:none;fill-opacity:0.235294;stroke:#000000;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
   </g>
 </svg>
