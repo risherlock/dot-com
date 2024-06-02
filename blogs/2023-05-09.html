@@ -3,8 +3,8 @@
 <html>
 <head>
   <title>k-vector range search algorithm</title>
-<link href='https://fonts.googleapis.com/css?family=Lora' rel='stylesheet' type='text/css'>
-<link rel="stylesheet" href="../my_style.css">
+  <link href='https://fonts.googleapis.com/css?family=Lora' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="../my_style.css">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
@@ -14,19 +14,12 @@
   k-vector range search algorithm
 </h1>
 
-<p class="date">
-  May 9, 2023<br>
-  <span class="date">
-    Modified: <lastmod>2023-05-10</lastmod>
-  </span>
-</p>
-
 <p>
   <i>k-vector</i> is a time efficient range search algorithm developed by Daniele Mortari for identification of star patterns by star trackers onboard spacecrafts <a href="#mortari1997">[1]</a><a href="#mortari2014">[2]</a>. The name of the algorithm derives from the integer vector \(\boldsymbol{k}\) which, as we will see in this blog, plays central part in the execution of algorithm.
 </p>
 
 <p>
-  This blog is based on <a href="#mortari2014">[2]</a> and is intended to be commentary and guide to the paper. I hope this helps you in your journey to understand, or write software, for the algorithm.
+  This blog is based on <a href="#mortari2014">[2]</a> and is intended to be commentary and guide to the paper.
 </p>
 
 <h2>Problem statement</h2>
@@ -81,7 +74,7 @@
       <td>\(y_{\text{max}}\)</td>
       <td>Maximum element in the database. \(y_{\text{max}} = \boldsymbol{s}[n]\).</td>
     </tr>
-    
+
     <tr>
       <td>\(\lceil x\rceil\)</td>
       <td>Nearest integer greater than \(x\). Example: \(\lceil1.1\rceil\) = 2.</td>
@@ -202,7 +195,7 @@
         &nbsp;&nbsp;&nbsp;&nbsp;\(k_{\text{start}}\)++;<br>
         }<br>
       </td>
-      
+
       <td style="padding: 1em; border: 0.1em black solid;">
         while \(\left(\boldsymbol{s}[k_{\text{end}}]\gt y_{b}\right)\)<br>
         {<br>
@@ -228,14 +221,18 @@
 <p>
   <b>References</b><br>
   <ol>
-    <li><a id="mortari1997">Daniele Mortari - <i>Search-Less Algorithm for Star Pattern Recognition</i> (1997)</a></i></li><li><a id="mortari2014">Daniele Mortari, Beny Neta - <i>k-Vector range searching techniques</i> (2014)</a></li>
+    <li><a id="mortari1997">Daniele Mortari - <i>Search-Less Algorithm for Star Pattern Recognition</i> (1997)</a></i></li>
+    <li><a id="mortari2014">Daniele Mortari, Beny Neta - <i>k-Vector range searching techniques</i> (2014)</a></li>
   </ol>
 </p>
 
 <hr class="footer">
-<p class="footer">
-  <a href="blogs.html">blogs</a>
-</p>
+<div class="footer">
+  <div><a href="2023-04-24.html">previous</a></div>
+  <div><a href="blogs.html">blogs</a></div>
+  <div><a href="2024-05-21.html">next</a></div>
+</div>
+
 </body>
 </html>
 

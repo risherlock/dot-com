@@ -5,42 +5,26 @@
   <title>Encoding Morse Code</title>
   <link rel="stylesheet" href="../my_style.css">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
 
 <style>
-  table, th, td {
-    word-wrap: break-word;
-    border: 0px solid black;
-    padding-left: 1em;
-    padding-right:1em;
-    border-collapse: collapse;
-    margin-left: auto;
-    margin-right: auto;
+  .table-font {
+    font-family: 'Courier New', Courier, monospace;
   }
 </style>
+
+</head>
 
 <body>
 <h1 class="title">
   Encoding Morse Code
 </h1>
 
-<p class="date">
-  April 24, 2023<br>
-  <span class="date">
-    Modified: <lastmod>2023-04-28</lastmod>
-  </span>
+<p>
+  In September 2022, I was working on developing firmware for a Romanian PocketCube, <i>ROM-2</i>, at ORION Space. An 8-bit microcontroller, ATmega328p, was used as on-board computer which had to handle satellite mission plans as well as a series of image packets from the camera payload during image transmission. This required us to be economical with the memory usage by the software of on-board computer, and transmitting telemetry as Morse code was one of them.
 </p>
 
 <p>
-  The basic idea behind Morse code is to transmit pulses of continuous wave with varying lengths of transmissions representing dots and dashes (often called <i>dits</i> and <i>dahs</i>). It is with these dits and dahs that the characters of message are encoded.
-</p>
-
-<p>
-  Software that transmits Morse code should generate dits and dahs corresponding to each character of the message. This correspondence between characters and their Morse code needs to be encoded and stored somewhere in the software, which can easily be implemented in a variety of different ways. Since the number of characters having Morse code is so less and the computers are such a beefy things, this problem is a trivial task to be considered interesting.
-  </p>
-  
-<p>
-  In a project, however, I found myself trying to save every scrap of memory I could and had to encode Morse code with less memory usage for subsequent decoding and transmission in real-time. Here encoding refers to storing Morse codes in software in compile time. Decoding, on the other hand, refers to figuring out Morse code for given character of message from the encoded ones in real time for transmission.
+  The idea behind Morse code is to transmit pulses of continuous wave with varying lengths of transmissions representing dots and dashes (often called <i>dits</i> and <i>dahs</i>). It is with these dits and dahs that the characters of message are encoded. Software that transmits Morse code should generate dits and dahs corresponding to each character of the message. This correspondence between characters and their Morse code needs to be encoded and stored somewhere in the software, which can easily be implemented using a look-up table. However, due to the beforementioned reason, the constrained problem statement can be stated as follows: <i>Pack Morse code corresponding to each character into a C/C++ data-type <code>char/uint8_t</code> to occupy the least memory space, which is a byte or 8 bits.</i>
 </p>
 
 <h2>Morse code</h2>
@@ -49,8 +33,8 @@
   Morse codes for alphabets, numbers, and special characters has been standardized by International Telecommunication Union (ITU) as <i>International Morse Code</i>.
 </p>
 
-<table>
-  <p style="text-align: center; margin-bottom: 0;">Alphabets</p>
+<table class="table-center table-font">
+  <p style="text-align: center; margin-bottom: 0; font-family: 'Courier New', Courier, monospace;">Alphabets</p>
   <tr>
     <td>a&nbsp;&nbsp;&nbsp;.-  </td>
     <td>b&nbsp;&nbsp;&nbsp;-...</td>
@@ -96,8 +80,8 @@
   </tr>
 </table>
 
-<table>
-  <p style="text-align: center; margin-bottom: 0;">Numbers</p>
+<table class="table-center">
+  <p style="text-align: center; margin-bottom: 0; font-family: 'Courier New', Courier, monospace;">Numbers</p>
   <tr>
     <td>1&nbsp;&nbsp;&nbsp;.----</td>
     <td>2&nbsp;&nbsp;&nbsp;..---</td>
@@ -115,9 +99,9 @@
   </tr>
 </table>
 
-<table>
+<table class="table-center">
   <br>
-  <p style="text-align: center; margin-bottom: 0;">Special characters</p>
+  <p style="text-align: center; margin-bottom: 0; font-family: 'Courier New', Courier, monospace;">Special characters</p>
   <tr>
     <td>,&nbsp;&nbsp;&nbsp;--..--</td>
     <td>.&nbsp;&nbsp;&nbsp;.-.-.-</td>
@@ -157,37 +141,29 @@
 <h2>Encoding Morse code</h2>
 
 <p>
-  In September 2022, I was working on firmware for a Romanian PocketCube, <i>ROM-2</i>, at ORION Space. Software in an 8-bit microcontroller, ATmega328p, had to handle satellite mission plans as well as a series of image packets from the camera payload during image transmission. So I had to be economical with memory usage of by software and, among others, decoding Morse was one of them.
-</p>
-
-<p>
-  The length of Morse codes vary from one (eg. e and t) to six (eg. numbers). The smallest data-type we have in C/C++ is a byte (8 bits) so the goal is to pack Morse code corresponding to each character in a byte with dits as <code>'0'</code>s and dahs and <code>'1'</code>s. I will describe two ideas to achieve the goal. I had the pleasure of pondering on and independently discovering these ideas. However, while preparing for this blog post, I did some search online and realized that others had used similar approaches.
+  The length of Morse codes vary from one (eg. e and t) to six (eg. numbers) which means that a byte is an enough placeholder to encode Morse codes into it. We can easily encode the bits with 0s and 1s representating dits and dahs respectively. The question is how do we know how far to parse? In other words, how do we distinguish, for example, a (<code>.-</code>) from j (<code>.---</code>)? Had there been <I>three</I> states in binary, we could use the third bit to be our stop bit. Obviously we don't have that luxury so we need to look for possibility for utilizing unused bits of the byte to store the length of Morse code.
 </p>
 
 <h3>Mini-Morse</h3>
 
 <p>
-  The problem statement is pretty simple and straight forward. It is easy to code bits with <code>0</code>s and <code>1</code>s corresponding to dits and dahs but how do we know how far to parse? In other words, how do we distinguish, for example, a <code>.-</code> from j <code>.---</code>? Had there been <I>three</I> states in binary, we could use the third bit to be our stop bit. Obviously we don't have that luxury. This problem led to a search of possibility for utilizing unused bits to store the length of Morse code in binary.
-</p>
-
-<p>
-  If the length of Morse code is less than six, first five bits of a byte are used to store the Morse signals i.e. <code>0</code>s for dits and <code>1</code>s for dahs. The last three bits will be used to store the length of Morse code in Big Endian binary format. For example
-  <table>
-    <tr><td>e</td> <td>.-   </td><td>0____100</td></tr>
-    <tr><td>a</td> <td>.-   </td><td>01___010</td></tr>
-    <tr><td>d</td> <td>-..  </td><td>100__110</td></tr>
-    <tr><td>c</td> <td>-.-. </td><td>1010_001</td></tr>
-    <tr><td>1</td> <td>.----</td><td>01111101.</td></tr>
+  If the length of Morse code is less than six, first five bits of a byte are used to store the Morse signals i.e. <code>0</code>s for dits and <code>1</code>s for dahs. The last three bits will be used to store the length of Morse code in Big Endian binary format. For example:
+  <table class="table-center">
+    <tr><td>e</td> <td>.-   </td><td>0 - - - - 1 0 0</td></tr>
+    <tr><td>a</td> <td>.-   </td><td>0 1 - - - 0 1 0</td></tr>
+    <tr><td>d</td> <td>-..  </td><td>1 0 0 - - 1 1 0</td></tr>
+    <tr><td>c</td> <td>-.-. </td><td>1 0 1 0 - 0 0 1</td></tr>
+    <tr><td>1</td> <td>.----</td><td>0 1 1 1 1 1 0 1.</td></tr>
   </table><br>
 
   <i>Note: </i>It really does not matter if the unused bits are assigned either zeros or ones.
 </p>
 
 <p>
-  It can be observed that maximum value of last three bits is 101<sub>2</sub> or 5<sub>10</sub>. This suggests that the second last and the last bits will never be ones. Therefore, <code>_11</code> can be used to identify the Morse codes with length six. In doing so, we can take advantage of the first of the last three bits by storing the 6<sup>th</sup> Morse signal on it. Hence, first six bits of the byte represents Morse signals while the last to are ones pointing to the fact that the length of the Morse code is six. For example
-  <table>
-    <tr><td>,</td> <td>-.-.-.</td><td>10101011</td></tr>
-    <tr><td>.</td> <td>.-.-.-</td><td>01010111.</td></tr>
+  When the length of Morse code is six, we can no longer use last three bits to encode the length because we would only have 5 bits left to encode the Morse code. However, in this case, we can observe that the last two bits of the byte would both contain ones (i.e. <span style="font-family: 'Courier New', Courier, monospace;">- - - - - 1 1</span>), which is never the case for lengths from one to five. We can take advantage of this fact and use the first six bits of the byte to represent Morse signals, while the last two bits are ones. For example:
+  <table class="table-center">
+    <tr><td>,</td> <td>-.-.-.</td><td>1 0 1 0 1 0 1 1</td></tr>
+    <tr><td>.</td> <td>.-.-.-</td><td>0 1 0 1 0 1 1 1.</td></tr>
   </table><br>
 </p>
 
@@ -205,14 +181,14 @@
 </p>
 
 <p>
-  In this approach we start by encoding Morse signals from the first bit of the byte. After that, the remaining bits are filled with opposite of the last Morse signal. i.e. if the Morse code ends with dah (<code>1</code>), then remaining bits are filled by <code>0</code>s. Here are some examples:
-  
-  <table>
-    <tr><td>e</td><td>.-   </td><td>01111111</td></tr>
-    <tr><td>a</td><td>.-   </td><td>01000000</td></tr>
-    <tr><td>d</td><td>-..  </td><td>10011111</td></tr>
-    <tr><td>c</td><td>-.-. </td><td>10100000</td></tr>
-    <tr><td>1</td><td>.----</td><td>01111100</td></tr>
+  In this approach we start by encoding Morse signals from the first bit of the byte. Once done, the remaining bits are filled with opposite of the last Morse signal. i.e. if the Morse code ends with dah (0), then remaining bits are filled with ones. Here are some examples:
+
+  <table class="table-center">
+    <tr><td>e</td><td>.-   </td><td>0 1 1 1 1 1 1 1</td></tr>
+    <tr><td>a</td><td>.-   </td><td>0 1 0 0 0 0 0 0</td></tr>
+    <tr><td>d</td><td>-..  </td><td>1 0 0 1 1 1 1 1</td></tr>
+    <tr><td>c</td><td>-.-. </td><td>1 0 1 0 0 0 0 0</td></tr>
+    <tr><td>1</td><td>.----</td><td>0 1 1 1 1 1 0 0</td></tr>
   </table>
 </p>
 
@@ -220,53 +196,23 @@
   To decode the Morse signals from the encoded byte, we start detecting bit change from the last bit. This detection will help identify the Morse length and parsing that many bits from the first bit of the byte gives us the required Morse code.
 </p>
 
-<h2>Searching encoded byte</h2>
-
-<p>
-  So far we discussed the ways of encoding the Morse code on a byte for each characters of message to be transmitted. However, how do we find the byte corresponding to the character of message that we want to decode Morse code for? For example, if the message to be transmitted is <code>HELLO WORLD</code>, the software should convert each characters (<code>H</code>, <code>E</code>, <code>L</code> ...) to Morse code by decoding it from the encoded bytes. How do the software know the encoded byte corresponding to, for example, <code>H</code>? 
-</p>
-
-<p>
-  One way to achieve this is by storing the characters in an array and the encoded byte in another array with characters and their respective bytes sharing same indices on their respective arrays. A input character <code>x</code> is compared with each elements of character array and once <code>x</code> is identified, the index of <code>x</code> in the array is used to access the encoded Morse code for <code>x</code>. Only special characters are identified with this approach reason for which is discussed below.
-</p>
-
-<p>
-  We can however, use the fact that alphabets and numbers are stored as ASCII characters with serial integer values in C/C++ (i.e. A-Z: 65-90, a-z: 97-122, and 0-9: 48-57) to get rid of extra array to store the characters hence saving some memory.
-</p>
-
-<p>
-  Let us start with <code>const char alphanumeric[36]</code> that stores the encoded  bytes for alphabets followed by that of numbers from 0 to 9. We can use following flow chart to identify the particular encoded byte corresponding to the character <code>x</code>. However the eleven special characters used in Morse code does not appear serially in ASCII chart, so we need an extra array containing special characters to identify index of <code>x</code> to access the corresponding encoded Morse code from its array. 
-</p>
-
-<div style="text-align: center;">
-  <img src="figs/2023-04-24_search_byte.png" width="350em"><br><br>
-  Fig. Identification of encoded bytes for alphabet, numbers, and special characters.
-</div>
-
 <h2>Conclusions</h2>
 
 <p>
-  Both of the approaches are equivalent when it comes to memory usage in encoding Morse codes (i.e. a byte per Morse code). However, there is a distinction in real-time decoding. Before writing the software, I assumed that <i>Micro-Morse</i>, since it is so simple, must be time efficient to decode too. However, a day later I realized that "the bit change detector", running in the loop, might actually take more time than parsing the Morse code length <i>Mini-Morse</i>. This delay caused by few (6 at worst case e.g. e and t) loops could be trivial for microcontrollers running in order of MHz clock cycles. Anyways, with run-time considerations, <i>Mini-Morse</i> is a clear winner.
+  Both of the approaches fulfill our problem statement. Detection of the bit change in <i>Micro-Morse</i> helps to determine the length of the Morse code which is already present in the encoded byte of <i>Mini-Morse</i>. Fundamentally, both the techniques are identical after the length is determined.
 </p>
 
 <p>
-  The actual reason for detecting the bit change in <i>Micro-Morse</i> is to determine the length of the Morse code which is already present in the encoded byte of <i>Mini-Morse</i>. Therefore, it is safe to say that, fundamentally, both the techniques are identical after the length is parsed (for <i>Mini-Morse</i>) or counted (<i>Micro-Morse</i>).
-</p>
-
-<p>
-  <b>A note on the nomenclature</b><br>
-  Software that I wrote for <i>ROM-2</i> was named <i>Mini-Morse</i> for the memory saving considerations that went into it. Later, I came across the second idea and I had to give it a name to distinguish from the first, right? Also I had this false instinct that it was better than the former. Hence the word <i>Micro</i>.
-</p>
-
-<p>
-  You can find software for both of them <a href="https://github.com/risherlock/Software-Tinkering/tree/main/morse_code">here</a>.
+  If you are interested, you can find the software for both of them <a href="https://github.com/risherlock/Software-Tinkering/tree/main/morse_code">here</a>.
 </p>
 
 <hr class="footer">
-<p class="footer">
-  <a href="blogs.html">blogs</a>
-</p>
+
+<div class="footer">
+  <div><a href="2023-01-21.html">previous</a></div>
+  <div><a href="blogs.html">blogs</a></div>
+  <div><a href="2023-05-09.html">next</a></div>
+</div>
 
 </body>
 </html>
-
