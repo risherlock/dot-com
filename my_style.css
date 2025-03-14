@@ -48,6 +48,7 @@ p.date {
 
 span.date {
   font-family:'Courier New';
+  font-weight: 600;
 }
 
 hr.footer {
