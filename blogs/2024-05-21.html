@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <title>Accelerometers on gravitational field</title>
+  <link href='https://fonts.googleapis.com/css?family=Lora' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="../my_style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+<h1 class="title">
+  Accelerometers on gravitational field
+</h1>
+
+<p>
+  I have been playing with accelerometers (IMU in general) and algorithms associated with them for quite a while now. There is this singular behavior of accelerometer that anyone working with them is very likely to encounter one time or other. Recently, the same topic was mentioned in a class on the course <i>Advanced Sensory Systems and Sensor Data Processing</i> that I am taking for my Masters which rekindled my interest in the subject and led to this post. As we will see, probing into this matter takes us from the technical details of accelerometers to deep down the rabbit hole of a fundamental idea relating acceleration and gravity, as discovered by Einstein.
+</p>
+
+<h2>Problem statement</h2>
+
+<div style="margin: auto; text-align: center;">
+  <object data="figs/2024-05-21-accelerometer.svg" width="150em"> </object>
+  <br>
+  <i>Figure: Simplest schematic of an ideal accelerometer. The acceleration is measured along the axis of the arrow.</i>
+</div>
+
+<p>
+  Accelerometers are the sensors that measure its own acceleration. For instance, if we take an accelerometer on hand and accelerate it along direction of its axis, it registers positive value of acceleration, and negative if same is done in opposite direction. With this information, I invite you to imagine two experiments.
+
+  <ol>
+    <li>The sensor is placed on a table with its axis facing towards the center of Earth.</li>
+    <li>The sensor, in same orientation, is allowed to freefall from a certain height.</li>
+  </ol>
+</p>
+
+<p>
+  Take your time, think it through, and try to come up with your own conclusions to what the value of accelerometer should be in above two experiments. I imagine that it is more fun if you have your own presumption before you read any further. Nevertheless, here are some options that you can pick from.
+</p>
+
+<h4>First experiment</h4>
+
+<p>
+    <input type="radio" name="experiment1"> The sensor is at rest so it records zero.<br>
+    <input type="radio"  name="experiment1"> The sensor at rest is experiencing the acceleration due to gravity so it records \(+g\).<br>
+    <input type="radio"  name="experiment1"> The sensor reads \(-g\).<br>
+  </ol>
+</p>
+
+<h4>Second experiment</h4>
+
+<p>
+    <input type="radio" name="experiment2"> The sensor accelerates towards the ground hence it reads \(+g\).<br>
+    <input type="radio"  name="experiment2"> The sensor is at freefall and does not experience its weight i.e. sensor reads zero.<br>
+  </ol>
+</p>
+
+<h2>Mechanical accelerometer</h2>
+
+<p>
+  Visualization of the inner workings of accelerometers provides a good way to understand them. An accelerometer has a test mass attached to spring from either side as shown in figure 2. The axis of sensor is defined by the line along which the mass can oscillate. When the sensor accelerates, the spring opposite to the direction of motion contracts while the other expands. The displacement of mass is measured electronically and registered as acceleration after appropriate unit conversions.
+</p>
+
+<div style="margin: auto; text-align: center;">
+  <object data="figs/2024-05-21-accelerations.svg" width="250em"> </object>
+  &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+  <object data="figs/2024-05-21-sensor_reading.svg" width="500em"> </object><br>
+  <i>Left: The state of springs inside accelerometers when at rest and freefall on a gravitational field. <br>Right: Simulated sensor measurements showing the nature of graph that one would expect from an actual experiments. If you have an accelerometer handy, I encourage you to give it a try.</i>
+</div>
+
+<p>
+  When accelerometer is placed on table, the mass inside the sensor tends to go towards the centre of the Earth compressing the sensor as it does so. This produces the measurement of \(-g\) and the sensor is led to believe that it is accelerating away from the center of the Earth!
+</p>
+
+<p>
+  Likewise, on freefall, the mass as well as the body of the sensor is falling at same rate due to which neither of the springs contract (or stretch), hence zero acceleration.
+</p>
+
+<p>
+  The mechanical model of accelerometer is sufficient to explain the result of the experiments that was proposed in the first section. This explaination suits well, I believe, to the temperament of practical minded people. However, same might not necessarily be true for those seeking <i>the true</i> answer to the following questions:
+  <ol>
+    <li>Why does the sensor, which is supposed to measure acceleration, at rest on table should measure any acceleration at all?</li>
+    <li>Why does it not measure any acceleration during freefall in which case, as we all know, the sensor accelerates towards the center of the Earth?</li>
+  </ol>
+</p>
+
+<h2 style="font-style: italic;">Gedankenexperiments</h2>
+
+<p>
+  From this point on, we disregard the technical details of an accelerometer with its mass and springs. Instead, we treat accelerometer as a blackbox that measures its acceleration. With this assumption, we attempt to come up with a conclusion that holds for <i>any</i> accelerometers that might be built using any technology. Our journey in this direction starts with  the discussion of Einstein's inquiry into the nature of acceleration and gravity. We will use Einstein's powerful technique of <i>Gedankenexperiments</i>, or thought experiments, to get clue on what's going on.
+</p>
+
+<div style="margin: auto; text-align: center;">
+  <object data="figs/2024-05-21-equivalence.svg" width="600em"> </object><br>
+  <i>Figure: Two thought experiments from the point of view of different observers.</i>
+</div>
+
+<p style="font-family: mono; text-align: center;">
+  Experiment I
+</p>
+
+<p>
+  <span style="font-family: mono;">Ia : </span>You are on the Earth with a ball on your hand. If you let go of the ball, you would observe, as one always does, that the ball accelerates towards the ground with \(g\). After it approaches and settles on the ground, the ball, from your point of view, is at rest.
+</p>
+
+<p>
+  <span style="font-family: mono;">Ib : </span>Now imagine same from the point of view of the ball in freefall after you let it go. In this case, reality is quite different. The ball experiences the Earth accelerating towards it. When it settles to the ground, from its perspective, the ball is now <i>accelerating up with the Earth</i> and it perceives a force in the direction of acceleration. It is to be noted that while in freefall, the ball had no experience of any force which occurs only after contact to the ground. readme
+</p>
+
+<p style="font-family: mono; text-align: center;">
+  Experiment II
+</p>
+
+<p>
+  <span style="font-family: mono;">IIa : </span>You are standing inside a spacecraft accelerating up with \(g\) and you perform <span style="font-family: mono;">Experiment I</span> again. You will observe, like you did on the surface of Earth, that the ball appears to accelerate towards the floor of the spacecraft. It is true that the spacecraft is  accelerating towards the ball and not the ball falling down. However, if your view outside the spacecraft was blocked, you would have no way of determining whether you are on the Earth or on an accelerating spacecraft.
+</p>
+
+<p>
+  <span style="font-family: mono;">IIb : </span>Again, if we view above experiment from the prespective of the ball, the floor of the spacecraft is accelerating up towards it. The ball does not experience any force while the spacecraft is approaching it. However, after the floor of the spacecraft comes in contact with the ball, it starts to accelerate with the spacecraft therefore experiencing force in same direction.
+</p>
+
+<h3>Premonition</h3>
+
+<p>
+  From our thought experiments, we can organize our observations as following:
+</p>
+
+
+<div>
+  <table style="margin: auto;">
+    <th>Gravitational field</th><th>Accelerating frame</th>
+    <tr>
+      <td>Observer at rest experiences force away from the center of the planet.</td><td>Objects at rest appears to be accelerating for accelerating observers.</td>
+    </tr>
+    <tr>
+      <td><i>Force of gravity</i> vanishes to accelerating observer in freefall.</td><td>Acceleration vanishes to observer at rest.</td>
+    </tr>
+  </table>
+</div>
+
+<p>
+  The experiments clearly gives some hint that there could be some fundamental connection between acceleration and gravitational field. Furthermore, it shows that what one observes depends on whether they are accelerating or not.
+</p>
+
+<p>
+  Take your time. Perform these experiments in your <i>own head</i>, and make sure you understand the gist of the above table before proceeding further with the blog. Once the idea clicks in your head, things will never be the same for you, just as it was for Einstein (and the entire scientific world which profited from his works) which inspired him to develop the geometrical theory of gravity.
+</p>
+
+<h3>The principal of equivalence </h3>
+
+<p>
+  Einstein drew a hypothesis from these thought experiments which is now known as the equivalence principal which concludes that:
+
+  <blockquote>A gravitational field is physically equivalent to accelerating frame and there is no experiment that an observer can perform to distinguish between two. Accelerating frame generates gravitational field and, conversely, gravitational field introduces accelerating frame.</blockquote>
+</p>
+
+<p>
+  Not only did he found the relation between gravitation field and acceleration but he concluded that <i>these two are physically same phenomena!</i>
+</p>
+
+<p>
+  In a lecture given in Japan on 1922, Einstein recalls:
+
+  <blockquote style="font-style: italic;">"The breakthrough came suddenly one day. I was sitting on a chair in my patent office in Bern. Suddenly a thought struck me: If a man falls freely, he would not feel his weight. I was taken aback. This simple thought experiment made a deep impression on me. This led me to the theory of gravity. I continued my thought: A falling man is accelerated. Then what he feels and judges is happening in the accelerated frame of reference. A falling man does not feel his weight because in his reference frame there is a new gravitational field which cancels the gravitational field due to the Earth."</blockquote>
+</p>
+
+<p>
+  Ultimately his research led him to develop the general theory of relativity. Einstein concluded that there is no such thing as <i>gravitational force</i>. The mass of the planet curves the space-time around it such that any object on its field naturally finds it way towards the center of mass of the planet due to the geometry of space-time. To prevent this freefall motion, force must be applied to the object from opposite direction like the way a floor or table does to a ball. Since the direction of this force is outward from the center of planet, the object at rest on gravitational field of a planet is accelerating upwards!
+</p>
+
+<h3>Conclusion</h3>
+
+<p>
+  We have set the necessary foundation to finally conclude the behavior of accelerometer in the gravitational field. The important step is to abandon Newtonian picture of gravity as force. Instead, we should adopt Einstein's view of nature where freefall in gravtational field is not result of <i>gravitational force</i> but due to space-time curvature i.e. freefall occurrs not because the an object is pulled or pushed. Force is experienced (i.e. accelerating frame is created) in a gravitational field only if its free motion is prevented which results in accelerating frame.
+</p>
+
+<p>
+  With this relativistic picture, all we need is to reaize the fact that the accelerometer, as a sensor, is an observer in gravitational field. When at rest on table, the sensor is an accelerating frame with its direction away from the center of the Earth, so it should register \(-g\). Likewise, when at freefall, the sensor must read zero acceleration. This is indeed how the sensor behaves in reality.
+</p>
+
+<p>
+  At this point, we are in position to answer the two questions that we asked earlier in our journey.
+</p>
+
+<ol>
+  <li>Why does the sensor, which is supposed to measure acceleration, at rest on table should measure any acceleration at all?
+  <blockquote><b>Ans: </b>Because the sensor is accelerating.</blockquote></li>
+  <li>does it not measure any acceleration during freefall in which case, as we all know, the sensor accelerates towards the center of the Earth?
+  <blockquote><b>Ans: </b>Because the sensor is not accelerating.</blockquote></li></li>
+</ol>
+
+<p>As simple as that. There seems to be no puzzle at all; the accelerometers has always been faithful, doing what they are supposed to do.</p>
+
+<!--
+<p>
+  The counterintuitive behavior of the accelerometer on gravitational field actually corroborates beautifully with how relativistic physics works.
+</p> -->
+
+<h2>Afterthought</h2>
+
+<p>
+  As I was writing this blog, I had the impression that accelerometers were simple devices that measure acceleration and that it was gravity which made the situation complex (owing to the counterintuitive sensor readings). However, now I suspect it is quite the opposite. <i>Acceleration is an interesting phenomenon</i>. For instance accelerating electrons create electromagnetic waves, accelerating masses produce gravitational waves, and, as we saw, accelerating objects <i>creates</i> gravitational field.
+ </p>
+
+ <p>
+  This makes me wonder if we humans have understood all there is to understand about the notion of acceleration as we know it. Or is there a more general idea waiting to be discovered about the rate of change of the rate of change of position?
+</p>
+
+<hr class="footer">
+<div class="footer">
+  <div><a href="2023-05-09.html">previous</a></div>
+  <div><a href="blogs.html">blogs</a></div>
+  <div><a href="2025-03-14.html">next</a></div>
+</div>
+
+</body>
+</html>

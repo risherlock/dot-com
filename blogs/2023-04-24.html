@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>Encoding Morse code</title>
+  <link rel="stylesheet" href="../my_style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+  .table-font {
+    font-family: 'Courier New', Courier, monospace;
+  }
+</style>
+
+</head>
+
+<body>
+<h1 class="title">
+  Encoding Morse code
+</h1>
+
+<p>
+  In September 2022, I was working on developing firmware for a Romanian PocketCube, <i>ROM-2</i>, at ORION Space. An 8-bit microcontroller, ATmega328p, was used as on-board computer which had to handle satellite mission plans as well as a series of image packets from the camera payload during image transmission. This required us to be economical with the memory usage by the software of on-board computer, and transmitting telemetry as Morse code was one of them.
+</p>
+
+<p>
+  The idea behind Morse code is to transmit pulses of continuous wave with varying lengths of transmissions representing dots and dashes (often called <i>dits</i> and <i>dahs</i>). It is with these dits and dahs that the characters of message are encoded. Software that transmits Morse code should generate dits and dahs corresponding to each character of the message. This correspondence between characters and their Morse code needs to be encoded and stored somewhere in the software, which can easily be implemented using a look-up table. However, due to the beforementioned reason, the constrained problem statement can be stated as follows: <i>Pack Morse code corresponding to each character into a C/C++ data-type <code>char/uint8_t</code> to occupy the least memory space, which is a byte or 8 bits.</i>
+</p>
+
+<h2>Morse code</h2>
+
+<p>
+  Morse codes for alphabets, numbers, and special characters has been standardized by International Telecommunication Union (ITU) as <i>International Morse Code</i>.
+</p>
+
+<table class="table-center table-font">
+  <p style="text-align: center; margin-bottom: 0; font-family: 'Courier New', Courier, monospace;">Alphabets</p>
+  <tr>
+    <td>a&nbsp;&nbsp;&nbsp;.-  </td>
+    <td>b&nbsp;&nbsp;&nbsp;-...</td>
+    <td>c&nbsp;&nbsp;&nbsp;-.-.</td>
+    <td>d&nbsp;&nbsp;&nbsp;-.. </td>
+    <td>e&nbsp;&nbsp;&nbsp;.   </td>
+  </tr>
+
+  <tr>
+    <td>f&nbsp;&nbsp;&nbsp;..-.</td>
+    <td>g&nbsp;&nbsp;&nbsp;--. </td>
+    <td>h&nbsp;&nbsp;&nbsp;....</td>
+    <td>i&nbsp;&nbsp;&nbsp;..  </td>
+    <td>j&nbsp;&nbsp;&nbsp;.---</td>
+  </tr>
+
+  <tr>
+    <td>k&nbsp;&nbsp;&nbsp;-.- </td>
+    <td>l&nbsp;&nbsp;&nbsp;.-..</td>
+    <td>m&nbsp;&nbsp;&nbsp;--  </td>
+    <td>n&nbsp;&nbsp;&nbsp;-.  </td>
+    <td>o&nbsp;&nbsp;&nbsp;--- </td>
+  </tr>
+
+  <tr>
+    <td>p&nbsp;&nbsp;&nbsp;.--.</td>
+    <td>q&nbsp;&nbsp;&nbsp;--.-</td>
+    <td>r&nbsp;&nbsp;&nbsp;.-. </td>
+    <td>s&nbsp;&nbsp;&nbsp;... </td>
+    <td>t&nbsp;&nbsp;&nbsp;-   </td>
+  </tr>
+
+  <tr>
+    <td>u&nbsp;&nbsp;&nbsp;..- </td>
+    <td>v&nbsp;&nbsp;&nbsp;...-</td>
+    <td>w&nbsp;&nbsp;&nbsp;.-- </td>
+    <td>x&nbsp;&nbsp;&nbsp;-..-</td>
+    <td>y&nbsp;&nbsp;&nbsp;-.--</td>
+  </tr>
+
+  <tr>
+    <td>z&nbsp;&nbsp;&nbsp--..</td>
+  </tr>
+</table>
+
+<table class="table-center">
+  <p style="text-align: center; margin-bottom: 0; font-family: 'Courier New', Courier, monospace;">Numbers</p>
+  <tr>
+    <td>1&nbsp;&nbsp;&nbsp;.----</td>
+    <td>2&nbsp;&nbsp;&nbsp;..---</td>
+    <td>3&nbsp;&nbsp;&nbsp;...--</td>
+    <td>4&nbsp;&nbsp;&nbsp;....-</td>
+    <td>5&nbsp;&nbsp;&nbsp;.....</td>
+  </tr>
+
+  <tr>
+    <td>6&nbsp;&nbsp;&nbsp;-....</td>
+    <td>7&nbsp;&nbsp;&nbsp;--...</td>
+    <td>8&nbsp;&nbsp;&nbsp;---..</td>
+    <td>9&nbsp;&nbsp;&nbsp;----.</td>
+    <td>0&nbsp;&nbsp;&nbsp;-----</td>
+  </tr>
+</table>
+
+<table class="table-center">
+  <br>
+  <p style="text-align: center; margin-bottom: 0; font-family: 'Courier New', Courier, monospace;">Special characters</p>
+  <tr>
+    <td>,&nbsp;&nbsp;&nbsp;--..--</td>
+    <td>.&nbsp;&nbsp;&nbsp;.-.-.-</td>
+    <td>!&nbsp;&nbsp;&nbsp;-.-.--</td>
+    <td>:&nbsp;&nbsp;&nbsp;---...</td>
+    <td>;&nbsp;&nbsp;&nbsp;-.-.-.</td>
+  </tr>
+
+  <tr>
+    <td>(&nbsp;&nbsp;&nbsp;-.--. </td>
+    <td>)&nbsp;&nbsp;&nbsp;-.--.-</td>
+    <td>"&nbsp;&nbsp;&nbsp;.-..-.</td>
+    <td>@&nbsp;&nbsp;&nbsp;.--.-.</td>
+    <td>&&nbsp;&nbsp;&nbsp;.-... </td>
+  </tr>
+
+  <tr>
+    <td>?&nbsp;&nbsp;&nbsp;..--..</td>
+  </tr>
+</table>
+
+<p>
+  It should be noted that the there are more Morse codes than the ones listed above, and not all characters and unicode have their own Morse code.
+</p>
+
+<p>
+  Time duration of dit is considered to be the fundamental unit of time in Morse codes, which, in turn, depends on the speed (usually measured in words per minute) of Morse code transmission. Other time intervals are expressed in terms of the time duration of a dit as shown below:
+
+  <ol>
+    <li>dah: 3 dits</li>
+    <li>between Morse signals: 1 dit</li>
+    <li>between letters: 3 dits</li>
+    <li>between words: 7 dits</li>
+  </ol>
+</p>
+
+<h2>Encoding Morse code</h2>
+
+<p>
+  The length of Morse codes vary from one (eg. e and t) to six (eg. numbers) which means that a byte is an enough placeholder to encode Morse codes into it. We can easily encode the bits with 0s and 1s representating dits and dahs respectively. The question is how do we know how far to parse? In other words, how do we distinguish, for example, a (<code>.-</code>) from j (<code>.---</code>)? Had there been <I>three</I> states in binary, we could use the third bit to be our stop bit. Obviously we don't have that luxury so we need to look for possibility for utilizing unused bits of the byte to store the length of Morse code.
+</p>
+
+<h3>Mini-Morse</h3>
+
+<p>
+  If the length of Morse code is less than six, first five bits of a byte are used to store the Morse signals i.e. <code>0</code>s for dits and <code>1</code>s for dahs. The last three bits will be used to store the length of Morse code in Big Endian binary format. For example:
+  <table class="table-center">
+    <tr><td>e</td> <td>.-   </td><td>0 - - - - 1 0 0</td></tr>
+    <tr><td>a</td> <td>.-   </td><td>0 1 - - - 0 1 0</td></tr>
+    <tr><td>d</td> <td>-..  </td><td>1 0 0 - - 1 1 0</td></tr>
+    <tr><td>c</td> <td>-.-. </td><td>1 0 1 0 - 0 0 1</td></tr>
+    <tr><td>1</td> <td>.----</td><td>0 1 1 1 1 1 0 1.</td></tr>
+  </table><br>
+
+  <i>Note: </i>It really does not matter if the unused bits are assigned either zeros or ones.
+</p>
+
+<p>
+  When the length of Morse code is six, we can no longer use last three bits to encode the length because we would only have 5 bits left to encode the Morse code. However, in this case, we can observe that the last two bits of the byte would both contain ones (i.e. <span style="font-family: 'Courier New', Courier, monospace;">- - - - - 1 1</span>), which is never the case for lengths from one to five. We can take advantage of this fact and use the first six bits of the byte to represent Morse signals, while the last two bits are ones. For example:
+  <table class="table-center">
+    <tr><td>,</td> <td>-.-.-.</td><td>1 0 1 0 1 0 1 1</td></tr>
+    <tr><td>.</td> <td>.-.-.-</td><td>0 1 0 1 0 1 1 1.</td></tr>
+  </table><br>
+</p>
+
+<p>
+  Decoding Morse code from the encoded byte starts with detection of length of Morse code from the last three bytes<a href="#*"><sup>*</sup></a>. Morse signals are then parsed from the first bit of the byte to the length of the code.
+</p>
+
+<p>
+  <a id="*"><sup>*</sup></a>If length is found to be seven then it means Morse code has length six (How? Why?).
+</p>
+<h3>Micro-Morse</h3>
+
+<p>
+  I came across this idea in April 5, 2023 which rekindled my interest in this topic. This idea is much simpler than <i>Mini-Morse</i> and does not require us to encode the length of Morse code.
+</p>
+
+<p>
+  In this approach we start by encoding Morse signals from the first bit of the byte. Once done, the remaining bits are filled with opposite of the last Morse signal. i.e. if the Morse code ends with dah (0), then remaining bits are filled with ones. Here are some examples:
+
+  <table class="table-center">
+    <tr><td>e</td><td>.-   </td><td>0 1 1 1 1 1 1 1</td></tr>
+    <tr><td>a</td><td>.-   </td><td>0 1 0 0 0 0 0 0</td></tr>
+    <tr><td>d</td><td>-..  </td><td>1 0 0 1 1 1 1 1</td></tr>
+    <tr><td>c</td><td>-.-. </td><td>1 0 1 0 0 0 0 0</td></tr>
+    <tr><td>1</td><td>.----</td><td>0 1 1 1 1 1 0 0</td></tr>
+  </table>
+</p>
+
+<p>
+  To decode the Morse signals from the encoded byte, we start detecting bit change from the last bit. This detection will help identify the Morse length and parsing that many bits from the first bit of the byte gives us the required Morse code.
+</p>
+
+<h2>Conclusions</h2>
+
+<p>
+  Both of the approaches fulfill our problem statement. Detection of the bit change in <i>Micro-Morse</i> helps to determine the length of the Morse code which is already present in the encoded byte of <i>Mini-Morse</i>. Fundamentally, both the techniques are identical after the length is determined.
+</p>
+
+<p>
+  If you are interested, you can find the software for both of them <a href="https://github.com/risherlock/Software-Tinkering/tree/main/morse_code">here</a>.
+</p>
+
+<hr class="footer">
+
+<div class="footer">
+  <div><a href="2023-01-21.html">previous</a></div>
+  <div><a href="blogs.html">blogs</a></div>
+  <div><a href="2023-05-09.html">next</a></div>
+</div>
+
+</body>
+</html>
